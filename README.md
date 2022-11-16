@@ -4,7 +4,7 @@ Beast Mode CLI
 
 ## Getting Started
 
-Add to path.
+Copy `bmcli` and place it in `usr/local/bin`
 
 ## Add a command
 
@@ -32,3 +32,8 @@ chmod +x ./commands/my_new_command
 | Light Purple | 1;35 |
 | Light Cyan   | 1;36 |
 | White        | 1;37 |
+
+## Sources
+
+- https://thoughtbot.com/upcase/videos/lets-build-a-cli
+- https://medium.com/@brotandgames/build-a-custom-cli-with-bash-e3ce60cfb9a4
