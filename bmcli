@@ -37,6 +37,27 @@ update() {
   cp $WORKDIR/bmcli $DESTINATION
 }
 
+cli_help() {
+  cli_name=${0##*/}
+  echo "
+$cli_name
+Beast Mode CLI
+Version: $(cat $WORKDIR/VERSION)
+https://github.com/ShadyDL/bmcli
+
+Usage: $cli_name [command]
+
+Commands:
+  start_day        Start applications
+  go_home          Stop workflow applications
+
+  update           Run this when you changed the src code
+  as_executable    Run this with ./bmcli to copy to script to your path
+  *                Help
+"
+  exit 1
+}
+
 # CLI Commands
 startDay() {
   cli_help_start_flow() {
@@ -105,27 +126,6 @@ goHome() {
 }
 
 # Main
-cli_help() {
-  cli_name=${0##*/}
-  echo "
-$cli_name
-Beast Mode CLI
-Version: $(cat $WORKDIR/VERSION)
-my_git_repo
-
-Usage: $cli_name [command]
-
-Commands:
-  deploy           Deploy
-  start_day        Start applications
-  go_home          Stop workflow applications
-
-  update           Run this when you changed the src code
-  as_executable       Run this with ./bmcli to copy to script to your path
-  *                Help
-"
-  exit 1
-}
 
 # cli_log "Exporting config ..."
 # [ ! -f "$WORKDIR/config" ] \
