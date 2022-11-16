@@ -1,0 +1,51 @@
+#!/usr/bin/env bash
+set -e
+export WORKDIR=$(cd $(dirname $0) && pwd)
+# shellcheck source=common
+. "$WORKDIR/common"
+
+cli_help() {
+  cli_name=${0##*/}
+  echo "
+$cli_name
+Beast Mode CLI
+Version: $(cat $WORKDIR/VERSION)
+my_git_repo
+
+Usage: $cli_name [command]
+
+Commands:
+  deploy           Deploy
+  start_flow       Start applications
+  go_home          Stop workflow applications
+  *                Help
+"
+  exit 1
+}
+
+# cli_log "Exporting config ..."
+# [ ! -f "$WORKDIR/config" ] \
+#   && echo "ERROR: No $WORKDIR/config file found. " \
+#   && echo "cp $WORKDIR/config.template $WORKDIR/config and adjust." \
+#   && exit 1
+
+# export $(cat "$WORKDIR/config" | xargs)
+
+case "$1" in
+  deploy|d)
+    "$WORKDIR/commands/deploy" "$2" | tee -ia "$WORKDIR/logs/deploy_${2}.log"
+    ;;
+  
+  start_day)
+    "$WORKDIR/commands/start_day" | tee -ia "$WORKDIR/logs/deploy_${2}.log"
+    ;;
+
+  go_home)
+    "$WORKDIR/commands/go_home" | tee -ia "$WORKDIR/logs/deploy_${2}.log"
+    ;;
+    
+  *)
+  
+  cli_help
+  ;;
+esac

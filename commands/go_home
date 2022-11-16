@@ -1,0 +1,43 @@
+#!/usr/bin/env bash
+
+# set -e
+# . "$WORKDIR/common"
+
+YELLOW='\033[1;37m'
+GREEN='\033[0;32m'
+NC='\033[0m' # No Color
+
+cli_help_go_home() {
+  echo "
+Command: Go home
+
+Usage: 
+  go_home"
+  exit 1
+}
+
+export BAGCLI_PROJECT_NAME=$1
+
+echo -e "${YELLOW} Quiting already??! ${NC}"
+
+apps=(
+"Slack"
+# "Google Chrome"
+"Arc"
+"Spotify"
+"1Password"
+"NordPass"
+"Calendar"
+"Finder"
+# "Visual Studio Code"
+)
+
+for i in ${!apps[@]}; do
+  appName="\"${apps[$i]}\""
+  cmd="quit app ${appName}"
+  sudo osascript -e "$cmd"
+done
+
+echo -e "${GREEN} Guess we're done here, leggo gtfo! ${NC}"
+echo ''
+echo ''
