@@ -4,7 +4,12 @@ Beast Mode CLI
 
 ## Getting Started
 
-Copy `bmcli` and place it in `usr/local/bin`
+Copy `bmcli` and place it in `usr/local/bin`.
+Yup that's it, all done!
+
+## Making changes
+
+When you make changes you also need to update `bmcli` in `usr/local/bin`.
 
 ## Add a command
 
