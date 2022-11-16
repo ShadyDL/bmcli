@@ -1,5 +1,11 @@
 #!/usr/bin/env bash
 
+# Variables
+set -e
+export WORKDIR=$(cd $(dirname $0) && pwd)
+# shellcheck source=common
+. "$WORKDIR/common"
+
 # Colors
 BLACK='\033[0;30m'
 RED='\033[0;31m'
@@ -19,79 +25,86 @@ LIGHT_CYAN='\033[1;36m'
 WHITE='\033[1;37m'
 NC='\033[0m' # No Color
 
-# Scripts
+DESTINATION=/usr/local/bin/bmcli
+
+# Helper
+asExecutable() {
+  cp $WORKDIR/bmcli $DESTINATION
+}
+
+update() {
+  rm "/usr/local/bin/bmcli"
+  cp $WORKDIR/bmcli $DESTINATION
+}
+
+# CLI Commands
 startDay() {
   cli_help_start_flow() {
-  echo "
+    echo "
 Command: Start flow
 
 Usage: 
   start_flow"
-  exit 1
-}
+    exit 1
+  }
 
-# Main
-export BAGCLI_PROJECT_NAME=$1
-echo
-echo -e "${LIGHT_YELLOW}Another day, another... ahh whatevs get me some coffee...${LIGHT_YELLOW}"
-echo "Loading..."
+  # Main
+  export BAGCLI_PROJECT_NAME=$1
+  echo
+  echo -e "${LIGHT_YELLOW}Another day, another... ahh whatevs get me some coffee...${NC}"
+  echo "Loading..."
 
-apps=(
-"Slack"
-"Google Chrome"
-"Arc"
-"Spotify"
-"1Password"
-"NordPass"
-"Calendar"
-"Visual Studio Code"
-)
+  apps=(
+    "Slack"
+    "Google Chrome"
+    "Arc"
+    "Spotify"
+    "1Password"
+    "NordPass"
+    "Calendar"
+    "Visual Studio Code"
+  )
 
-for i in ${!apps[@]}; do
-  appName="\"${apps[$i]}\""
-  cmd="launch app ${appName}"
-  sudo osascript -e "$cmd"
-done
+  for i in ${!apps[@]}; do
+    appName="\"${apps[$i]}\""
+    cmd="launch app ${appName}"
+    sudo osascript -e "$cmd"
+  done
 
-echo
-echo -e "${GREEN} All set up! Enjoy your coffee☕ and sigaret 🚬 ${GREEN}"
-echo
+  echo
+  echo -e "${GREEN} All set up! Enjoy your coffee☕ and sigaret 🚬 ${NC}"
+  echo
 }
 
 goHome() {
-echo -e "${LIGHT_YELLOW} Quiting already??! ${NC}"
+  echo -e "${LIGHT_YELLOW} Quiting already??! ${NC}"
 
-apps=(
-"Slack"
-"Google Chrome"
-"Arc"
-"Music"
-"Spotify"
-"1Password"
-"NordPass"
-"Calendar"
-"Finder"
-"Visual Studio Code"
-)
+  apps=(
+    "Slack"
+    "Google Chrome"
+    "Arc"
+    "Music"
+    "Spotify"
+    "1Password"
+    "NordPass"
+    "Calendar"
+    "Finder"
+    "Visual Studio Code"
+  )
 
-for i in ${!apps[@]}; do
-  appName="\"${apps[$i]}\""
-  cmd="quit app ${appName}"
-  sudo osascript -e "$cmd"
-done
+  for i in ${!apps[@]}; do
+    appName="\"${apps[$i]}\""
+    cmd="quit app ${appName}"
+    sudo osascript -e "$cmd"
+  done
 
-echo -e "${GREEN} Guess we're done here, leggo gtfo! ${NC}"
-echo ''
-echo ''
+  echo -e "${GREEN} Guess we're done here, leggo gtfo! ${NC}"
+  echo ''
+  echo ''
 
 }
 
-
-set -e
-export WORKDIR=$(cd $(dirname $0) && pwd)
-# shellcheck source=common
-. "$WORKDIR/common"
-
+# Main
 cli_help() {
   cli_name=${0##*/}
   echo "
@@ -104,8 +117,11 @@ Usage: $cli_name [command]
 
 Commands:
   deploy           Deploy
-  start_flow       Start applications
+  start_day        Start applications
   go_home          Stop workflow applications
+
+  update           Run this when you changed the src code
+  as_executable       Run this with ./bmcli to copy to script to your path
   *                Help
 "
   exit 1
@@ -120,21 +136,28 @@ Commands:
 # export $(cat "$WORKDIR/config" | xargs)
 
 case "$1" in
-  deploy|d)
-    "$WORKDIR/commands/deploy" "$2" | tee -ia "$WORKDIR/logs/deploy_${2}.log"
-    ;;
-  
-  start_day)
-    startDay | tee -ia "$WORKDIR/logs/deploy_${2}.log"
-    # "$WORKDIR/commands/start_day" | tee -ia "$WORKDIR/logs/deploy_${2}.log" # Deprecated, cannot run folder as single executable
-    ;;
+deploy | d)
+  "$WORKDIR/commands/deploy" "$2"
+  ;;
 
-  go_home)
-    goHome | tee -ia "$WORKDIR/logs/deploy_${2}.log"
-    ;;
-    
-  *)
-  
+start_day)
+  startDay
+  # "$WORKDIR/commands/start_day" | tee -ia "$WORKDIR/logs/deploy_${2}.log" # Deprecated, cannot run folder as single executable
+  ;;
+
+go_home)
+  goHome
+  ;;
+
+update)
+  update
+  ;;
+
+as_executable)
+  asExecutable
+  ;;
+*)
+
   cli_help
   ;;
 esac
