@@ -1,4 +1,77 @@
 #!/usr/bin/env bash
+
+# Colors
+YELLOW='\033[1;33m'
+GREEN='\033[0;32m'
+NC='\033[0m' # No Color
+
+# Scripts
+startDay() {
+  cli_help_start_flow() {
+  echo "
+Command: Start flow
+
+Usage: 
+  start_flow"
+  exit 1
+}
+
+# Main
+export BAGCLI_PROJECT_NAME=$1
+echo
+echo -e "${YELLOW}Another day, another... ahh whatevs get me some coffee...${YELLOW}"
+echo "Loading..."
+
+apps=(
+"Slack"
+"Google Chrome"
+"Arc"
+"Spotify"
+"1Password"
+"NordPass"
+"Calendar"
+"Visual Studio Code"
+)
+
+for i in ${!apps[@]}; do
+  appName="\"${apps[$i]}\""
+  cmd="launch app ${appName}"
+  sudo osascript -e "$cmd"
+done
+
+echo
+echo -e "${GREEN} All set up! Enjoy your coffee☕ and sigaret 🚬 ${GREEN}"
+echo
+}
+
+goHome() {
+echo -e "${YELLOW} Quiting already??! ${NC}"
+
+apps=(
+"Slack"
+# "Google Chrome"
+"Arc"
+"Spotify"
+"1Password"
+"NordPass"
+"Calendar"
+"Finder"
+# "Visual Studio Code"
+)
+
+for i in ${!apps[@]}; do
+  appName="\"${apps[$i]}\""
+  cmd="quit app ${appName}"
+  sudo osascript -e "$cmd"
+done
+
+echo -e "${GREEN} Guess we're done here, leggo gtfo! ${NC}"
+echo ''
+echo ''
+
+}
+
+
 set -e
 export WORKDIR=$(cd $(dirname $0) && pwd)
 # shellcheck source=common
@@ -37,11 +110,12 @@ case "$1" in
     ;;
   
   start_day)
-    "$WORKDIR/commands/start_day" | tee -ia "$WORKDIR/logs/deploy_${2}.log"
+    startDay | tee -ia "$WORKDIR/logs/deploy_${2}.log"
+    # "$WORKDIR/commands/start_day" | tee -ia "$WORKDIR/logs/deploy_${2}.log" # Deprecated, cannot run folder as single executable
     ;;
 
   go_home)
-    "$WORKDIR/commands/go_home" | tee -ia "$WORKDIR/logs/deploy_${2}.log"
+    goHome | tee -ia "$WORKDIR/logs/deploy_${2}.log"
     ;;
     
   *)
